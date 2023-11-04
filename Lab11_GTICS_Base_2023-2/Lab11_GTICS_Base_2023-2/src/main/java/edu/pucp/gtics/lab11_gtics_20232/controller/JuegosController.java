@@ -40,7 +40,8 @@ public class JuegosController {
         return "juegos/lista";
     }
 
-    @GetMapping(value = {"", "/", "/vista"})
+    //@GetMapping(value = {"", "/", "/vista"})              // Así estaba
+    @GetMapping(value = {"/vista"})
     public String vistaJuegos (Model model, @RequestParam("id") int id){
         Optional<Juegos> opt = juegosRepository.findById(id);
         //List<Paises> listaPaises = paisesRepository.findAll();

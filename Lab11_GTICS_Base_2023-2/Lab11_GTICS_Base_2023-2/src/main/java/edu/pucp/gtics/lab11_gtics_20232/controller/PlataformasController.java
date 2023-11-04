@@ -26,7 +26,6 @@ public class PlataformasController {
     public String listaPlataformas (Model model){
         List<Plataformas> listaplataformas = plataformasRepository.findAll(Sort.by("nombre"));
         model.addAttribute("listaplataformas", listaplataformas);
-
         return "plataformas/lista";
     }
 
