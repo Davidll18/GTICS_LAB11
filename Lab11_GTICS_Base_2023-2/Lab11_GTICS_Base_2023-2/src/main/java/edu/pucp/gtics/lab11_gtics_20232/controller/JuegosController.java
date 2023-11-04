@@ -3,6 +3,7 @@ package edu.pucp.gtics.lab11_gtics_20232.controller;
 import edu.pucp.gtics.lab11_gtics_20232.entity.*;
 import edu.pucp.gtics.lab11_gtics_20232.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-
+@RequestMapping("/juegos")
 public class JuegosController {
 
     @Autowired
@@ -32,17 +33,28 @@ public class JuegosController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping(value = {"/juegos/lista"})
-    public String listaJuegos (...){
-
+    @GetMapping(value = {"/lista"})
+    public String listaJuegos (Model model){
+        List<Juegos> listajuegos = juegosRepository.findAll(Sort.by("nombre"));
+        model.addAttribute("listajuegos", listajuegos);
+        return "juegos/lista";
     }
 
     @GetMapping(value = {"", "/", "/vista"})
-    public String vistaJuegos ( ...){
-
+    public String vistaJuegos (Model model, @RequestParam("id") int id){
+        Optional<Juegos> opt = juegosRepository.findById(id);
+        //List<Paises> listaPaises = paisesRepository.findAll();
+        if (opt.isPresent()){
+            Juegos juegos = opt.get();
+            model.addAttribute("distribuidora", juegos);
+            //model.addAttribute("listaPaises", listaPaises);
+            return "juegos/vista";
+        }else {
+            return "redirect:/juegos/lista";
+        }
     }
 
-    @GetMapping("/juegos/nuevo")
+    @GetMapping("/nuevo")
     public String nuevoJuegos(Model model, @ModelAttribute("juego") Juegos juego){
         List<Plataformas> listaPlataformas = plataformasRepository.findAll();
         List<Distribuidoras> listaDistribuidoras = distribuidorasRepository.findAll();
@@ -53,7 +65,7 @@ public class JuegosController {
         return "juegos/editarFrm";
     }
 
-    @GetMapping("/juegos/editar")
+    @GetMapping("/editar")
     public String editarJuegos(@RequestParam("id") int id, Model model){
         Optional<Juegos> opt = juegosRepository.findById(id);
         List<Plataformas> listaPlataformas = plataformasRepository.findAll();
@@ -71,7 +83,7 @@ public class JuegosController {
         }
     }
 
-    @PostMapping("/juegos/guardar")
+    @PostMapping("/guardar")
     public String guardarJuegos(Model model, RedirectAttributes attr, @ModelAttribute("juego") @Valid Juegos juego, BindingResult bindingResult ){
         if(bindingResult.hasErrors( )){
             List<Plataformas> listaPlataformas = plataformasRepository.findAll();
@@ -95,7 +107,7 @@ public class JuegosController {
 
     }
 
-    @GetMapping("/juegos/borrar")
+    @GetMapping("/borrar")
     public String borrarDistribuidora(@RequestParam("id") int id){
         Optional<Juegos> opt = juegosRepository.findById(id);
         if (opt.isPresent()) {
