@@ -16,12 +16,16 @@
                     <div th:if="${param.error}" class="alert alert-danger" role="alert">
                         Acceso Denegado
                     </div>
-                    <form class="row g-3" method="post">
+                    <form class="row g-3 needs-validation" novalidate method="post" th:action="@{/processLogin}">
                         <div class="form-group">
-                            <label for="">Usuario</label>
+                            <label for="yourUsername" class="form-label">Usuario</label>
+                            <input type="text" name="yourUsername" class="form-control" id="yourUsername" required>
+                            <div class="invalid-feedback">Por favor, ingresa un usuario</div>
                         </div>
                         <div class="form-group">
-                            <label for="">Contraseña</label>
+                            <label for="yourPassword" class="form-label">Contraseña</label>
+                            <input type="text" name="yourPassword" class="form-control" id="yourPassword" required>
+                            <div class="invalid-feedback">Por favor, ingresa una contraseña</div>
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-block">Ingresar</button>

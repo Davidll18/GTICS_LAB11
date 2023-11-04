@@ -27,7 +27,7 @@ public class DistribuidorasController {
     @Autowired
     PaisesRepository paisesRepository;
 
-    @GetMapping(value = {"/lista"})
+    @GetMapping(value = {"/lista","/",""})
     public String listaDistribuidoras (Model model){
         List<Distribuidoras> listadistribuidoras = distribuidorasRepository.findAll(Sort.by("nombre"));
         model.addAttribute("listadistribuidoras", listadistribuidoras);

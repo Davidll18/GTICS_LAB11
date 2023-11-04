@@ -33,7 +33,7 @@ public class JuegosController {
     @Autowired
     UserRepository userRepository;
 
-    @GetMapping(value = {"/lista"})
+    @GetMapping(value = {"/lista","/",""})
     public String listaJuegos (Model model){
         List<Juegos> listajuegos = juegosRepository.findAll(Sort.by("nombre"));
         model.addAttribute("listajuegos", listajuegos);
