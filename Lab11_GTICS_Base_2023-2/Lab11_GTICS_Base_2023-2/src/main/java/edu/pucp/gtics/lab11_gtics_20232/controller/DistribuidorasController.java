@@ -66,9 +66,9 @@ public class DistribuidorasController {
             return "distribuidoras/editarFrm";
         } else {
             if (distribuidora.getIddistribuidora() == 0) {
-                attr.addFlashAttribute("msg", "Distribuidora creada exitosamente");
+                attr.addFlashAttribute("msg", "Distribuidora '" + distribuidora.getNombre() + "' creada exitosamente");
             } else {
-                attr.addFlashAttribute("msg", "Distribuidora actualizada exitosamente");
+                attr.addFlashAttribute("msg", "Distribuidora '" + distribuidora.getNombre() + "' actualizada exitosamente");
             }
             distribuidorasRepository.save(distribuidora);
             return "redirect:/distribuidoras/lista";
@@ -76,10 +76,13 @@ public class DistribuidorasController {
     }
 
     @GetMapping("/borrar")
-    public String borrarDistribuidora(@RequestParam("id") int id){
+    public String borrarDistribuidora(@RequestParam("id") int id, RedirectAttributes attr){
         Optional<Distribuidoras> opt = distribuidorasRepository.findById(id);
         if (opt.isPresent()) {
+            Distribuidoras distribuidoras = opt.get();
             distribuidorasRepository.deleteById(id);
+            attr.addFlashAttribute("msg", "Distribuidora '" + distribuidoras.getNombre() +"' borrado exitosamente");
+
         }
         return "redirect:/distribuidoras/lista";
     }

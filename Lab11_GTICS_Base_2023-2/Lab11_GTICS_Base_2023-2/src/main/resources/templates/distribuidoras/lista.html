@@ -6,6 +6,7 @@
 
     <div id="content">
         <main>
+            <br>
             <!-- Contenido -->
             <div class="page-header text-center">
                 <h1>Lista de Distribuidoras</h1>
@@ -18,7 +19,7 @@
                     <span th:text="${msg}"></span>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <table class="table table-striped">
+                <table class="table" style="color: white">
                     <thead>
                     <tr>
                         <th>#</th>
@@ -32,7 +33,7 @@
                     <tbody>
                     <tr th:each="distribuidora, info : ${listadistribuidoras}">
                         <td th:text="${info.index + 1}"></td>
-                        <td><a class="link-secondary" th:href="${distribuidora.web}" th:text="${distribuidora.nombre}"></a></td>
+                        <td><a class="link-secondary" th:href="${distribuidora.web}" th:text="${distribuidora.nombre}" style="color: #7ea8ef"></a></td>
                         <td th:text="${distribuidora.fundacion}"></td>
                         <td th:text="${distribuidora.pais.nombre}"></td>
                         <td><a class="btn btn-primary" th:title="Editar" th:href="@{'/distribuidoras/editar?id=' + ${distribuidora.iddistribuidora}}"><span class="bi bi-pencil-square"></span></a></td>
@@ -44,7 +45,7 @@
             </div>
             <!-- /Contenido -->
         </main>
-        <div th:replace="fragments/footer.html :: footer(year='2022')"></div>
+        <div th:replace="fragments/footer.html :: footer(year='2023')"></div>
     </div>
 </div>
 <div th:replace="fragments/base.html :: jsScripts"></div>

@@ -109,10 +109,12 @@ public class JuegosController {
     }
 
     @GetMapping("/borrar")
-    public String borrarDistribuidora(@RequestParam("id") int id){
+    public String borrarDistribuidora(@RequestParam("id") int id, RedirectAttributes attr){
         Optional<Juegos> opt = juegosRepository.findById(id);
         if (opt.isPresent()) {
+            Juegos juegos = opt.get();
             juegosRepository.deleteById(id);
+            attr.addFlashAttribute("msg", "Juego '" + juegos.getNombre() +"' borrado exitosamente");
         }
         return "redirect:/juegos/lista";
     }
