@@ -19,11 +19,10 @@
                     <span th:text="${msg}"></span>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <table class="table table-striped" style="color: white">
+                <table class="table" style="color: white">
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th></th>
                         <th style="width: 18%">Nombre</th>
                         <th style="width: 32%">Descripción</th>
                         <th style="width: 20%">Plataforma</th>
@@ -34,10 +33,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-
-                        <td><a class="btn btn-primary" th:title="Editar" ><span class="bi bi-pencil-square"></span></a></td>
-                        <td><a class="btn btn-danger" th:title="Borrar" ><span class="bi bi-trash"></span></a></td>
+                    <tr th:each="juego, info : ${listajuegos}">
+                        <td th:text="${info.index + 1}"></td>
+                        <td th:text="${juego.nombre}"></td>
+                        <td th:text="${juego.descripcion}"></td>
+                        <td th:text="${juego.plataforma.nombre}"></td>
+                        <td th:text="${juego.distribuidora.nombre}"></td>
+                        <td th:text="${juego.precio}"></td>
+                        <td><a class="btn btn-primary" th:title="Editar" th:href="@{'/juegos/editar?id=' + ${juego.idjuego}}"><span class="bi bi-pencil-square"></span></a></td>
+                        <td><a class="btn btn-danger" th:title="Borrar" th:href="@{'/juegos/borrar?id=' + ${juego.idjuego}}"><span class="bi bi-trash"></span></a></td>
                     </tr>
                     </tbody>
                 </table>
