@@ -1,5 +1,7 @@
 package edu.pucp.gtics.lab11_gtics_20232.controller;
 
+import edu.pucp.gtics.lab11_gtics_20232.dao.DistribuidorasDao;
+import edu.pucp.gtics.lab11_gtics_20232.dao.JuegosDao;
 import edu.pucp.gtics.lab11_gtics_20232.entity.*;
 import edu.pucp.gtics.lab11_gtics_20232.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +35,20 @@ public class JuegosController {
     @Autowired
     UserRepository userRepository;
 
+
+    final JuegosDao juegosDao;
+    final DistribuidorasDao distribuidorasDao;
+
+    public JuegosController(JuegosDao juegosDao, DistribuidorasDao distribuidorasDao) {
+        this.juegosDao = juegosDao;
+        this.distribuidorasDao = distribuidorasDao;
+    }
+
     @GetMapping(value = {"/lista","/",""})
     public String listaJuegos (Model model){
         List<Juegos> listajuegos = juegosRepository.findAll(Sort.by("nombre"));
         model.addAttribute("listajuegos", listajuegos);
+        //model.addAttribute("listajuegos", juegosDao.listar()); // Descomentar cuando ya esta el WS
         return "juegos/lista";
     }
 
@@ -63,21 +75,29 @@ public class JuegosController {
         model.addAttribute("listaPlataformas", listaPlataformas);
         model.addAttribute("listaDistribuidoras", listaDistribuidoras);
         model.addAttribute("listaGeneros", listaGeneros);
+
+        // model.addAttribute("listaDistribuidoras", distribuidorasDao.listar()); // Descomentar cuando ya esta el WS
+
         return "juegos/editarFrm";
     }
 
     @GetMapping("/editar")
-    public String editarJuegos(@RequestParam("id") int id, Model model){
-        Optional<Juegos> opt = juegosRepository.findById(id);
+    public String editarJuegos(@ModelAttribute("juego") Juegos juego, @RequestParam("id") int id, Model model){
+
+        Juegos juegoid = juegosDao.buscarPorId(id);
+
         List<Plataformas> listaPlataformas = plataformasRepository.findAll();
         List<Distribuidoras> listaDistribuidoras = distribuidorasRepository.findAll();
         List<Generos> listaGeneros = generosRepository.findAll();
-        if (opt.isPresent()){
-            Juegos juego = opt.get();
+        if (juegoid != null ){
+            juego = juegoid;
             model.addAttribute("juego", juego);
             model.addAttribute("listaPlataformas", listaPlataformas);
             model.addAttribute("listaDistribuidoras", listaDistribuidoras);
             model.addAttribute("listaGeneros", listaGeneros);
+            // model.addAttribute("listaDistribuidoras", distribuidorasDao.listar()); // Descomentar cuando ya esta el WS
+
+
             return "juegos/editarFrm";
         }else {
             return "redirect:/juegos/lista";
@@ -85,27 +105,19 @@ public class JuegosController {
     }
 
     @PostMapping("/guardar")
-    public String guardarJuegos(Model model, RedirectAttributes attr, @ModelAttribute("juego") @Valid Juegos juego, BindingResult bindingResult ){
-        if(bindingResult.hasErrors( )){
-            List<Plataformas> listaPlataformas = plataformasRepository.findAll();
-            List<Distribuidoras> listaDistribuidoras = distribuidorasRepository.findAll();
-            List<Generos> listaGeneros = generosRepository.findAll();
-            model.addAttribute("juego", juego);
-            model.addAttribute("listaPlataformas", listaPlataformas);
-            model.addAttribute("listaDistribuidoras", listaDistribuidoras);
-            model.addAttribute("listaGeneros", listaGeneros);
+    public String guardarJuegos(@ModelAttribute("juego") @Valid Juegos juego, BindingResult bindingResult,
+                                Model model, RedirectAttributes attr ){
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("listaPlataformas", plataformasRepository.findAll());
+            model.addAttribute("listaDistribuidoras", distribuidorasDao.listar());
+            model.addAttribute("listaGeneros", generosRepository.findAll());
             return "juegos/editarFrm";
         } else {
-            if (juego.getIdjuego() == 0) {
-                attr.addFlashAttribute("msg", "Juego creado exitosamente");
-            } else {
-                attr.addFlashAttribute("msg", "Juego actualizado exitosamente");
-            }
-            juegosRepository.save(juego);
+            String msg = "Juego " + (juego.getIdjuego() == null ? "creado" : "actualizado") + " exitosamente";
+            attr.addFlashAttribute("msg", msg);
+            juegosDao.guardar(juego);
             return "redirect:/juegos/lista";
         }
-
-
     }
 
     @GetMapping("/borrar")

@@ -1,5 +1,6 @@
 package edu.pucp.gtics.lab11_gtics_20232.controller;
 
+import edu.pucp.gtics.lab11_gtics_20232.dao.DistribuidorasDao;
 import edu.pucp.gtics.lab11_gtics_20232.entity.Distribuidoras;
 import edu.pucp.gtics.lab11_gtics_20232.entity.Paises;
 import edu.pucp.gtics.lab11_gtics_20232.repository.DistribuidorasRepository;
@@ -21,17 +22,24 @@ import java.util.Optional;
 
 public class DistribuidorasController {
 
+    final DistribuidorasDao distribuidorasDao;
+
+
     @Autowired
     DistribuidorasRepository distribuidorasRepository;
 
     @Autowired
     PaisesRepository paisesRepository;
 
+    public DistribuidorasController(DistribuidorasDao distribuidorasDao) {
+        this.distribuidorasDao = distribuidorasDao;
+    }
+
     @GetMapping(value = {"/lista","/",""})
     public String listaDistribuidoras (Model model){
         List<Distribuidoras> listadistribuidoras = distribuidorasRepository.findAll(Sort.by("nombre"));
         model.addAttribute("listadistribuidoras", listadistribuidoras);
-
+        //model.addAttribute("listadistribuidoras",distribuidorasDao.listar());// Descomentar cuando ya esta el WS
         return "distribuidoras/lista";
     }
 
@@ -54,6 +62,8 @@ public class DistribuidorasController {
     public String nuevaDistribuidora(Model model, @ModelAttribute("distribuidora") Distribuidoras distribuidora){
         List<Paises> listaPaises = paisesRepository.findAll();
         model.addAttribute("listaPaises", listaPaises);
+
+
         return "distribuidoras/editarFrm";
     }
 
