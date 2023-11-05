@@ -20,14 +20,12 @@ import java.util.Optional;
 @RequestMapping("/juegos")
 public class JuegosController {
 
-    @Autowired
-    JuegosRepository juegosRepository;
 
     @Autowired
     PlataformasRepository plataformasRepository;
 
-    @Autowired
-    DistribuidorasRepository distribuidorasRepository;
+    final
+    DistribuidorasDao distribuidorasDao;
 
     @Autowired
     GenerosRepository generosRepository;
@@ -35,42 +33,44 @@ public class JuegosController {
     @Autowired
     UserRepository userRepository;
 
-
-    final JuegosDao juegosDao;
-    final DistribuidorasDao distribuidorasDao;
+    final
+    JuegosDao juegosDao;
 
     public JuegosController(JuegosDao juegosDao, DistribuidorasDao distribuidorasDao) {
         this.juegosDao = juegosDao;
         this.distribuidorasDao = distribuidorasDao;
     }
 
+
     @GetMapping(value = {"/lista","/",""})
     public String listaJuegos (Model model){
-        List<Juegos> listajuegos = juegosRepository.findAll(Sort.by("nombre"));
-        model.addAttribute("listajuegos", listajuegos);
-        //model.addAttribute("listajuegos", juegosDao.listar()); // Descomentar cuando ya esta el WS
+//        List<Juegos> listajuegos = juegosRepository.findAll(Sort.by("nombre"));
+//        model.addAttribute("listajuegos", listajuegos);
+//        List<Juegos> listajuegos = juegosRepository.findAll(Sort.by("nombre"));
+//        model.addAttribute("listajuegos", listajuegos);
+        model.addAttribute("listajuegos", juegosDao.listar());
         return "juegos/lista";
     }
 
     //@GetMapping(value = {"", "/", "/vista"})              // Así estaba
-    @GetMapping(value = {"/vista"})
-    public String vistaJuegos (Model model, @RequestParam("id") int id){
-        Optional<Juegos> opt = juegosRepository.findById(id);
-        //List<Paises> listaPaises = paisesRepository.findAll();
-        if (opt.isPresent()){
-            Juegos juegos = opt.get();
-            model.addAttribute("distribuidora", juegos);
-            //model.addAttribute("listaPaises", listaPaises);
-            return "juegos/vista";
-        }else {
-            return "redirect:/juegos/lista";
-        }
-    }
+//    @GetMapping(value = {"/vista"})
+//    public String vistaJuegos (Model model, @RequestParam("id") int id){
+//        Optional<Juegos> opt = juegosRepository.findById(id);
+//        //List<Paises> listaPaises = paisesRepository.findAll();
+//        if (opt.isPresent()){
+//            Juegos juegos = opt.get();
+//            model.addAttribute("distribuidora", juegos);
+//            //model.addAttribute("listaPaises", listaPaises);
+//            return "juegos/vista";
+//        }else {
+//            return "redirect:/juegos/lista";
+//        }
+//    }
 
     @GetMapping("/nuevo")
     public String nuevoJuegos(Model model, @ModelAttribute("juego") Juegos juego){
         List<Plataformas> listaPlataformas = plataformasRepository.findAll();
-        List<Distribuidoras> listaDistribuidoras = distribuidorasRepository.findAll();
+        List<Distribuidoras> listaDistribuidoras = distribuidorasDao.listar();
         List<Generos> listaGeneros = generosRepository.findAll();
         model.addAttribute("listaPlataformas", listaPlataformas);
         model.addAttribute("listaDistribuidoras", listaDistribuidoras);
@@ -87,7 +87,7 @@ public class JuegosController {
         Juegos juegoid = juegosDao.buscarPorId(id);
 
         List<Plataformas> listaPlataformas = plataformasRepository.findAll();
-        List<Distribuidoras> listaDistribuidoras = distribuidorasRepository.findAll();
+        List<Distribuidoras> listaDistribuidoras = distribuidorasDao.listar();
         List<Generos> listaGeneros = generosRepository.findAll();
         if (juegoid != null ){
             juego = juegoid;
@@ -120,15 +120,28 @@ public class JuegosController {
         }
     }
 
+    @GetMapping("/delete")
+    public String borrarJuego(Model model, @RequestParam("id") int id, RedirectAttributes attr) {
+
+        juegosDao.borrarJuego(id);
+        attr.addFlashAttribute("msg", "Juego borrado exitosamente");
+        //}
+        return "redirect:/juegos/lista";
+
+    }
+
     @GetMapping("/borrar")
-    public String borrarDistribuidora(@RequestParam("id") int id, RedirectAttributes attr){
-        Optional<Juegos> opt = juegosRepository.findById(id);
-        if (opt.isPresent()) {
-            Juegos juegos = opt.get();
-            juegosRepository.deleteById(id);
-            attr.addFlashAttribute("msg", "Juego '" + juegos.getNombre() +"' borrado exitosamente");
+    public String borrarJuegos(Model model, @RequestParam("id") int id, RedirectAttributes attr) {
+        System.out.println("entro a borrar");
+
+        Juegos juegoBuscar = juegosDao.buscarPorId(id);
+
+        if (juegoBuscar != null) {
+            juegosDao.borrarJuego(id);
+            attr.addFlashAttribute("msg", "Juego borrado exitosamente");
         }
         return "redirect:/juegos/lista";
+
     }
 
     @GetMapping("/metodopago")

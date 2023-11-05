@@ -7,18 +7,19 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+@Component
 public class JuegosDao {
     public List<Juegos> listar(){
         List<Juegos> lista = new ArrayList<>();
 
         RestTemplate restTemplate = new RestTemplate();
-        String endPoint = "http://localhost:8080/juegos/listar";//cambiar si el ws tiene otro url
+        String endPoint = "http://localhost:8080/juegos";//cambiar si el ws tiene otro url
         ResponseEntity<Juegos[]> responseEntity = restTemplate.getForEntity(endPoint,Juegos[].class);
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             Juegos[] body = responseEntity.getBody();
@@ -39,18 +40,18 @@ public class JuegosDao {
     public void guardar(Juegos juego){
 
         RestTemplate restTemplate = new RestTemplate(); //cambiar si el ws tiene otro url
-        String endPoint = "http://localhost:8081/juegos/lista";
+        String endPoint = "http://localhost:8081/juegos";
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<Juegos> httpEntity = new HttpEntity<>(juego,httpHeaders);
 
-//        if(juego.getIdjuego() == null){
-//            restTemplate.postForEntity(endPoint,httpEntity,Juegos.class);
-//        }else{
-//            restTemplate.put(endPoint,httpEntity,Juegos.class);
-//        }
+        if(juego.getIdjuego() == null){
+            restTemplate.postForEntity(endPoint,httpEntity,Juegos.class);
+        }else{
+            restTemplate.put(endPoint,httpEntity,Juegos.class);
+        }
 
     }
 
@@ -59,7 +60,7 @@ public class JuegosDao {
         Juegos juego = null;
 
         RestTemplate restTemplate = new RestTemplateBuilder().basicAuthentication("elarios@pucp.pe", "prueba").build();
-        String url = "http://localhost:8081/juegos/lista?id=" + id;
+        String url = "http://localhost:8081/juegos?id=" + id;
 
         ResponseEntity<Juegos> forEntity = restTemplate.getForEntity(url, Juegos.class);
 
@@ -70,7 +71,7 @@ public class JuegosDao {
         return juego;
     }
 
-    public void borrar(int id) {
+    public void borrarJuego(int id) {
 
         RestTemplate restTemplate = new RestTemplate();
 
