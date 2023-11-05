@@ -26,7 +26,8 @@ public class DistribuidorasController {
     public List<Distribuidoras> listar() {
         return distribuidorasRepository.findAll();
     }
-    //listado:  GET /juegos/id
+
+    //listado:  GET /distribuidoras/id
     @GetMapping(value = "/{id}")
     public ResponseEntity<HashMap<String, Object>> buscarPorId(@PathVariable("id") String idStr) {
         try {
@@ -44,15 +45,16 @@ public class DistribuidorasController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
     // CREAR POST localhost:8081/distribuidoras
     @PostMapping(value = {"", "/"})
     public ResponseEntity<HashMap<String, Object>> guardar(
-            @RequestBody Distribuidoras product,
+            @RequestBody Distribuidoras distribuidoras,
             @RequestParam(value = "fetchId", required = false) boolean fetchId) {
         HashMap<String, Object> responseJson = new HashMap<>();
-        distribuidorasRepository.save(product);
+        distribuidorasRepository.save(distribuidoras);
         if (fetchId) {
-            responseJson.put("id", product.getId());
+            responseJson.put("id", distribuidoras.getId());
         }
         responseJson.put("estado", "creado");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseJson);
