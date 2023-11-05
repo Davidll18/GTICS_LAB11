@@ -6,6 +6,7 @@
 
     <div id="content">
         <main>
+            <br>
             <!-- Contenido -->
         <div class="page-header text-center">
             <h2 th:text="${juego.idjuego == 0? 'Nuevo Juego' : 'Editar Juego'}"></h2>
@@ -79,7 +80,7 @@
         </main>
     </div>
             <!-- /Contenido -->
-    <div th:replace="fragments/footer.html :: footer(year='2022')"></div>
+    <div th:replace="fragments/footer.html :: footer(year='2023')"></div>
 </div>
 <div th:replace="fragments/base.html :: jsScripts"></div>
 </body>

@@ -6,6 +6,7 @@
 
     <div id="content">
         <main>
+            <br>
             <!-- Contenido -->
             <div class="page-header text-center">
                 <h1>Lista de Plataformas</h1>
@@ -18,7 +19,7 @@
                     <span th:text="${msg}"></span>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <table class="table table-striped">
+                <table class="table" style="color: white">
                     <thead>
                     <tr>
                         <th>#</th>
@@ -42,7 +43,7 @@
             </div>
             <!-- /Contenido -->
         </main>
-        <div th:replace="fragments/footer.html :: footer(year='2022')"></div>
+        <div th:replace="fragments/footer.html :: footer(year='2023')"></div>
     </div>
 </div>
 <div th:replace="fragments/base.html :: jsScripts"></div>

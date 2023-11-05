@@ -22,6 +22,11 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: 0;
+            --opacidad-negro: 0.7;
+            background-image: linear-gradient(rgba(0, 0, 0, var(--opacidad-negro)), rgba(0, 0, 0, var(--opacidad-negro))), url(https://images2.alphacoders.com/588/588953.jpg);
         }
         .header{
             height: 80px;
@@ -177,131 +182,132 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <p class="logo">GameShop<img th:src="@{/img/icon.png}" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy"></p>
-        <div class="cart"><i class="fa-solid fa-cart-shopping"></i><p id="count">0</p></div>
-    </div>
-    <div class="container">
-        <div id="root"></div>
-        <div class="sidebar">
-            <div class="head"><p>Mi carrito</p></div>
-            <div id="cartItem">Su cesta está vacía</div>
-            <div class="foot">
-                <h3>Total</h3>
-                <h2 id="total">S/. 0.00</h2>
+        <div class="header">
+            <p class="logo">GameShop<img th:src="@{/img/icon.png}" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy"></p>
+            <div class="cart"><i class="fa-solid fa-cart-shopping"></i><p id="count">0</p></div>
+        </div>
+        <div class="container">
+            <div id="root"></div>
+            <div class="sidebar">
+                <div class="head"><p>Mi carrito</p></div>
+                <div id="cartItem">Su cesta está vacía</div>
+                <div class="foot">
+                    <h3>Total</h3>
+                    <h2 id="total">S/. 0.00</h2>
+                </div>
             </div>
         </div>
-    </div>
-    <script>
-        const product = [
-            {
-                id: 0,
-                image: 'https://image.api.playstation.com/vulcan/img/cfn/11307CjjUZ9rA_whmJUghJsG9Hl1-rmnOUTk3-nccj01ZpYMCHrJ8k8kzBrVyp-p-iCPej73TEJAs88ZBeiZ1uirtj0fsa16.png',
-                title: 'FIFA 21',
-                price: 149.9,
-            },
-            {
-                id: 1,
-                image: 'https://media.tycsports.com/files/2021/06/11/292846/fifa-21-gratis-en-pc_862x485_wmk.jpg',
-                title: 'Call of Duty',
-                price: 70,
-            },
-            {
-                id: 2,
-                image: 'https://image.api.playstation.com/vulcan/ap/rnd/202006/1520/EDtkdijFRwbmGKk1G9lrDoEF.png',
-                title: 'Assassin Creed Valhalla',
-                price: 100,
-            },
-            {
-                id: 3,
-                image: 'https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000012858/f4d4fd20c956621c4a342a8cade2e366f0e3cd43765bb52eccd0fea32b1606ce',
-                title: 'Resident Evil 6',
-                price: 120,
-            },
-            {
-                id: 4,
-                image: 'https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000000025/7137262b5a64d921e193653f8aa0b722925abc5680380ca0e18a5cfd91697f58',
-                title: 'The Legend of Zelda Breath of the Wild',
-                price: 200,
-            },
-            {
-                id: 5,
-                image: 'https://upload.wikimedia.org/wikipedia/en/d/d9/Xenoblade_box_artwork.png',
-                title: 'Xenoblade Chronicles: Definitive Edition',
-                price: 250,
-            },
-            {
-                id: 6,
-                image: 'https://i.ytimg.com/vi/9RbjFjYgNNg/maxresdefault.jpg',
-                title: 'Leyendas Pokémon: Arceus',
-                price: 160,
-            },
-            {
-                id: 7,
-                image: 'https://i.ytimg.com/vi/4CD_m4RW18I/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCrpesQq3L9VbPwWpk-pKmrgnGxVA',
-                title: 'Horizon Forbidden West',
-                price: 210,
-            }
-
-        ];
-        const categories = [...new Set(product.map((item)=>
-        {return item}))]
-        let i=0;
-        document.getElementById('root').innerHTML = categories.map((item)=>
-        {
-            var {image, title, price} = item;
-            return(
-                `<div class='box'>
-            <div class='img-box'>
-                <img class='images' src=${image}></img>
-            </div>
-        <div class='bottom'>
-        <p>${title}</p>
-        <h2>$ ${price}.00</h2>`+
-                "<button onclick='addtocart("+(i++)+")'>Añadir al carrito</button>"+
-                `</div>
-        </div>`
-            )
-        }).join('')
-
-        var cart =[];
-
-        function addtocart(a){
-            cart.push({...categories[a]});
-            displaycart();
-        }
-        function delElement(a){
-            cart.splice(a, 1);
-            displaycart();
-        }
-
-        function displaycart(){
-            let j = 0, total=0;
-            document.getElementById("count").innerHTML=cart.length;
-            if(cart.length==0){
-                document.getElementById('cartItem').innerHTML = "Your cart is empty";
-                document.getElementById("total").innerHTML = "S/. "+0+".00";
-            }
-            else{
-                document.getElementById("cartItem").innerHTML = cart.map((items)=>
+        <script>
+            const product = [
                 {
-                    var {image, title, price} = items;
-                    total=total+price;
-                    document.getElementById("total").innerHTML = "S/. "+total+".00";
-                    return(
-                        `<div class='cart-item'>
-                <div class='row-img'>
-                    <img class='rowimg' src=${image}>
+                    id: 0,
+                    image: 'https://media.tycsports.com/files/2021/06/11/292846/fifa-21-gratis-en-pc_862x485_wmk.jpg',
+                    title: 'FIFA 21',
+                    price: 149.9,
+                },
+                {
+                    id: 1,
+                    image: 'https://image.api.playstation.com/vulcan/img/cfn/11307CjjUZ9rA_whmJUghJsG9Hl1-rmnOUTk3-nccj01ZpYMCHrJ8k8kzBrVyp-p-iCPej73TEJAs88ZBeiZ1uirtj0fsa16.png',
+                    title: 'Call of Duty',
+                    price: 70,
+                },
+                {
+                    id: 2,
+                    image: 'https://image.api.playstation.com/vulcan/ap/rnd/202006/1520/EDtkdijFRwbmGKk1G9lrDoEF.png',
+                    title: 'Assassin Creed Valhalla',
+                    price: 100,
+                },
+                {
+                    id: 3,
+                    image: 'https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000012858/f4d4fd20c956621c4a342a8cade2e366f0e3cd43765bb52eccd0fea32b1606ce',
+                    title: 'Resident Evil 6',
+                    price: 120,
+                },
+                {
+                    id: 4,
+                    image: 'https://assets.nintendo.com/image/upload/c_fill,w_1200/q_auto:best/f_auto/dpr_2.0/ncom/software/switch/70010000000025/7137262b5a64d921e193653f8aa0b722925abc5680380ca0e18a5cfd91697f58',
+                    title: 'The Legend of Zelda Breath of the Wild',
+                    price: 200,
+                },
+                {
+                    id: 5,
+                    image: 'https://upload.wikimedia.org/wikipedia/en/d/d9/Xenoblade_box_artwork.png',
+                    title: 'Xenoblade Chronicles: Definitive Edition',
+                    price: 250,
+                },
+                {
+                    id: 6,
+                    image: 'https://i.ytimg.com/vi/9RbjFjYgNNg/maxresdefault.jpg',
+                    title: 'Leyendas Pokémon: Arceus',
+                    price: 160,
+                },
+                {
+                    id: 7,
+                    image: 'https://i.ytimg.com/vi/4CD_m4RW18I/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCrpesQq3L9VbPwWpk-pKmrgnGxVA',
+                    title: 'Horizon Forbidden West',
+                    price: 210,
+                }
+
+            ];
+            const categories = [...new Set(product.map((item)=>
+            {return item}))]
+            let i=0;
+            document.getElementById('root').innerHTML = categories.map((item)=>
+            {
+                var {image, title, price} = item;
+                return(
+                    `<div class='box'>
+                <div class='img-box'>
+                    <img class='images' src=${image}></img>
                 </div>
-                <p style='font-size:12px;'>${title}</p>
-                <h2 style='font-size: 15px;'>S/. ${price}.00</h2>`+
-                        "<i class='fa-solid fa-trash' onclick='delElement("+ (j++) +")'></i></div>"
-                    );
-                }).join('');
+            <div class='bottom'>
+            <p style='color:white;'>${title}</p>
+            <h2>$ ${price}.00</h2>`+
+                    "<button onclick='addtocart("+(i++)+")'>Añadir al carrito</button>"+
+                    `</div>
+            </div>`
+                )
+            }).join('')
+
+            var cart =[];
+
+            function addtocart(a){
+                cart.push({...categories[a]});
+                displaycart();
+            }
+            function delElement(a){
+                cart.splice(a, 1);
+                displaycart();
             }
 
+            function displaycart(){
+                let j = 0, total=0;
+                document.getElementById("count").innerHTML=cart.length;
+                if(cart.length==0){
+                    document.getElementById('cartItem').innerHTML = "Su cesta está vacía";
+                    document.getElementById("total").innerHTML = "S/. "+0+".00";
+                }
+                else{
+                    document.getElementById("cartItem").innerHTML = cart.map((items)=>
+                    {
+                        var {image, title, price} = items;
+                        total=total+price;
+                        document.getElementById("total").innerHTML = "S/. "+total+".00";
+                        return(
+                            `<div class='cart-item'>
+                    <div class='row-img'>
+                        <img class='rowimg' src=${image}>
+                    </div>
+                    <p style='font-size:12px;'>${title}</p>
+                    <h2 style='font-size: 15px;'>S/. ${price}.00</h2>`+
+                            "<i class='fa-solid fa-trash' onclick='delElement("+ (j++) +")'></i></div>"
+                        );
+                    }).join('');
+                }
 
-        }
-    </script>
+
+            }
+        </script>
+
 </body>
 </html>

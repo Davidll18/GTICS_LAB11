@@ -14,6 +14,20 @@
     <link rel="stylesheet" th:href="@{/css/fontawesome-all.min.css}">
     <!-- Google Fonts-->
     <link href="http://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css" />
+    <style>
+        body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background-size: cover;
+            background-repeat: no-repeat;
+            margin: 0;
+            --opacidad-negro: 0.8;
+            background-image: linear-gradient(rgba(0, 0, 0, var(--opacidad-negro)), rgba(0, 0, 0, var(--opacidad-negro))), url(https://images2.alphacoders.com/588/588953.jpg);
+            color: white;
+        }
+    </style>
 </head>
 <body>
 <div th:fragment="jsScripts">
