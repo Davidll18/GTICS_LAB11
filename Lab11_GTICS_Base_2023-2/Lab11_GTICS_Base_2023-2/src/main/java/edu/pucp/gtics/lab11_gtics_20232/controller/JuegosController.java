@@ -37,6 +37,7 @@ public class JuegosController {
     public String listaJuegos (Model model){
         List<Juegos> listajuegos = juegosRepository.findAll(Sort.by("nombre"));
         model.addAttribute("listajuegos", listajuegos);
+
         return "juegos/lista";
     }
 
