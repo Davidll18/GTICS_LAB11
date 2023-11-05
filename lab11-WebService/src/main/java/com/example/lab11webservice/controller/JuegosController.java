@@ -104,23 +104,28 @@ public class JuegosController {
     }
 
     //Borrar DELETE localhost:8081/juegos?id=..
-    @DeleteMapping("")
-    public ResponseEntity<HashMap<String, Object>> borrar(@RequestParam("id") String idStr){
-        try{
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<HashMap<String, Object>> borrar(@PathVariable("id") String idStr) {
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+
+        try {
             int id = Integer.parseInt(idStr);
-            HashMap<String, Object> rpta = new HashMap<>();
-            Optional<Juegos> byId = juegosRepository.findById(id);
-            if(byId.isPresent()){
+            if (juegosRepository.existsById(id)) {
                 juegosRepository.deleteById(id);
-                rpta.put("result","ok");
-            }else{
-                rpta.put("result","no ok");
-                rpta.put("msg","el Id enviado no existe");
+                responseMap.put("estado", "borrado exitoso");
+                return ResponseEntity.ok(responseMap);
+            } else {
+                responseMap.put("estado", "error");
+                responseMap.put("msg", "no se encontró el id: " + id);
+                return ResponseEntity.badRequest().body(responseMap);
             }
-            return ResponseEntity.ok(rpta);
-        }catch (NumberFormatException e){
-            return ResponseEntity.badRequest().body(null);
+        } catch (NumberFormatException ex) {
+            responseMap.put("estado", "error");
+            responseMap.put("msg", "El ID debe ser un número");
+            return ResponseEntity.badRequest().body(responseMap);
         }
     }
+
 
 }
