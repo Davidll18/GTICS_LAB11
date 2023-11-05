@@ -63,8 +63,9 @@ public class JuegosController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseJson);
     }
     //Editar PUT localhost:8081/juegos     SE EDITA CON X-WWW-FORM-URLENCODED, NO RAW
-    @PutMapping(value = {"", "/"}, consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public ResponseEntity<HashMap<String, Object>> actualizar(@RequestBody Juegos juegos1) {
+    @PutMapping(value = {"", "/"},
+            consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<HashMap<String, Object>> actualizar(Juegos juegos1) {
         HashMap<String, Object> rpta = new HashMap<>();
         if (juegos1.getId() != null && juegos1.getId() > 0) {
             Optional<Juegos> byId = juegosRepository.findById(juegos1.getId());

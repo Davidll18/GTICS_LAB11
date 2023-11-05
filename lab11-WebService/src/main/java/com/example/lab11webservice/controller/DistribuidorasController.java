@@ -70,8 +70,9 @@ public class DistribuidorasController {
 //    }
 
     //Editar PUT localhost:8081/distribuidoras.     SE EDITA CON X-WWW-FORM-URLENCODED, NO RAW
-    @PutMapping(value = {"", "/"}, consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public ResponseEntity<HashMap<String, Object>> actualizar(@RequestBody Distribuidoras distribuidoras1) {
+    @PutMapping(value = {"", "/"},
+            consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<HashMap<String, Object>> actualizar( Distribuidoras distribuidoras1) {
         HashMap<String, Object> rpta = new HashMap<>();
         if (distribuidoras1.getId() != null && distribuidoras1.getId() > 0) {
             Optional<Distribuidoras> byId = distribuidorasRepository.findById(distribuidoras1.getId());
