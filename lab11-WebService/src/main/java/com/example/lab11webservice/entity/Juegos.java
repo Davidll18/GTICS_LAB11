@@ -26,7 +26,7 @@ public class Juegos {
     @Column(name = "image", length = 400)
     private String image;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "idgenero")
     private Generos idgenero;
 
