@@ -19,7 +19,7 @@ public class JuegosDao {
         List<Juegos> lista = new ArrayList<>();
 
         RestTemplate restTemplate = new RestTemplate();
-        String endPoint = "http://localhost:8080/juegos";//cambiar si el ws tiene otro url
+        String endPoint = "http://localhost:8081/juegos";//cambiar si el ws tiene otro url
         ResponseEntity<Juegos[]> responseEntity = restTemplate.getForEntity(endPoint,Juegos[].class);
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             Juegos[] body = responseEntity.getBody();

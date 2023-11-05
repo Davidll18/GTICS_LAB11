@@ -30,6 +30,10 @@ public class JuegosController {
     @Autowired
     GenerosRepository generosRepository;
 
+//    @Autowired
+//    JuegosRepository juegosRepository;
+
+
     @Autowired
     UserRepository userRepository;
 
