@@ -129,4 +129,8 @@ public class JuegosController {
     public String yape(){
         return "plataformas/yape";
     }
+    @GetMapping("/carritoCompras")
+    public String carrito(){
+        return "carrito/carritoCompras";
+    }
 }
