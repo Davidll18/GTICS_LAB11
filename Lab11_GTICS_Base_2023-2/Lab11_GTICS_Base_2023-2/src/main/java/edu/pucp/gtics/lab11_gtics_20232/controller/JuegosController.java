@@ -117,8 +117,20 @@ public class JuegosController {
         return "redirect:/juegos/lista";
     }
 
-
-
-
-
+    @GetMapping("/metodopago")
+    public String metodopago(){
+        return "plataformas/metodopago";
+    }
+    @GetMapping("/deposito")
+    public String deposito(){
+        return "plataformas/deposito";
+    }
+    @GetMapping("/yape")
+    public String yape(){
+        return "plataformas/yape";
+    }
+    @GetMapping("/carritoCompras")
+    public String carrito(){
+        return "carrito/carritoCompras";
+    }
 }
